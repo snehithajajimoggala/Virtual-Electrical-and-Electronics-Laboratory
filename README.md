@@ -45,28 +45,29 @@ Then run the main file and choose the experiment from the menu. The program show
 for DC circuits, AC circuits, and Digital logic gates. This virtual lab helps to understand basic
 electrical and electronics concepts through simulation.
 
-Key Learnings:
-DC circuits: Ohm’s Law, Series & Parallel resistors, KVL
+**Key Learnings**:
+**DC circuits**: Ohm’s Law, Series & Parallel resistors, KVL
 
-AC circuits: RL, RC, and RLC resonance
-Digital gates: AND, OR, NOT, NAND, NOR
+**AC circuits**: RL, RC, and RLC resonance
+**Digital gates**: AND, OR, NOT, NAND, NOR
+
 Graph plotting using Matplotlib
 Python menu-driven logic and user input handling
 
 
-Future Scope:
+**Future Scope**:
 Add GUI interface
 More electronics experiments
 Option to export readings & graphs
 
-License:
+**License**:
 This project is licensed under the MIT License.
 
-Author:
+**Author**:
 Snehitha Jajimoggala, Pragati Engineering College
 GitHub Link: https://github.com/snehithajajimoggala/
 
- Acknowledgments:
+**Acknowledgments**:
 Developed using Python scientific libraries (NumPy, Matplotlib)
 Inspired by Basic Electrical & Electronics Lab experiments
 Designed to help students practice circuits & logic gates virtually
