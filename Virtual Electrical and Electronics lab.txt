@@ -1,0 +1,273 @@
+10.30 3:24 PM
+Code
+# ⚡ Virtual BEE Laboratory 3.0 – Scientific Edition (User Input Based Graphs)
+# Works fully offline in PyDroid 3
+
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ---------- MAIN MENU ----------
+def intro():
+    print("\n===============================")
+    print(" ⚡ Welcome to Virtual BEE Lab ⚡")
+    print("===============================")
+    print("1. DC Experiments")
+    print("2. AC Experiments")
+    print("3. Digital Experiments")
+    print("4. Exit")
+
+# ---------- DC EXPERIMENTS ----------
+def dc_experiments():
+    print("\n--- DC Experiments ---")
+    print("1. Verification of Ohm’s Law")
+    print("2. Series Resistor Connection")
+    print("3. Parallel Resistor Connection")
+    print("4. Kirchhoff’s Voltage Law (KVL)")
+    print("5. Back to Main Menu")
+
+    ch = int(input("Enter your choice: "))
+    if ch == 1:
+        ohms_law()
+    elif ch == 2:
+        series_resistors()
+    elif ch == 3:
+        parallel_resistors()
+    elif ch == 4:
+        kvl()
+
+def ohms_law():
+    print("\nExperiment: Verification of Ohm’s Law")
+    print("Theory: Ohm’s Law states that the current through a conductor is directly proportional to the voltage across it, provided the temperature remains constant. This experiment proves the linear relationship between voltage and current.")
+    
+    R = float(input("Enter resistance (ohms): "))
+    max_v = float(input("Enter maximum voltage to test (V): "))
+    
+    V = np.linspace(0, max_v, 11)
+    I = V / R
+
+    print("\nObservation Table:")
+    print("Voltage (V)\tCurrent (A)")
+    for v, i in zip(V, I):
+        print(f"{v:.2f}\t\t{i:.2f}")
+
+    print("\nConclusion: The graph between Voltage and Current is a straight line, proving Ohm’s Law.")
+    plt.plot(V, I, 'r*-', label='V-I Graph')
+    plt.title("Verification of Ohm’s Law")
+    plt.xlabel("Voltage (V)")
+    plt.ylabel("Current (A)")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+def series_resistors():
+    print("\nExperiment: Series Connection of Resistors")
+    print("Theory: In a series circuit, the same current flows through all resistors but the voltage divides in proportion to their resistances. The total resistance is the sum of individual resistances.")
+    
+    n = int(input("Enter number of resistors: "))
+    resistors = [float(input(f"Enter R{i+1} (ohms): ")) for i in range(n)]
+    V = float(input("Enter applied voltage (V): "))
+
+    R_total = sum(resistors)
+    I = V / R_total
+    print(f"\nTotal Resistance = {R_total:.2f} Ω")
+    print(f"Current in circuit = {I:.2f} A")
+
+    # Graph: Voltage drop across each resistor
+    voltages = [I * r for r in resistors]
+    plt.bar([f"R{i+1}" for i in range(n)], voltages, color='orange')
+    plt.title("Voltage Distribution in Series Circuit")
+    plt.xlabel("Resistor")
+    plt.ylabel("Voltage (V)")
+    plt.grid(True, axis='y')
+    plt.show()
+
+def parallel_resistors():
+    print("\nExperiment: Parallel Connection of Resistors")
+    print("Theory: In a parallel circuit, the voltage across each branch is the same but current divides inversely to the resistance values. The equivalent resistance is always less than the smallest resistor.")
+    
+    n = int(input("Enter number of resistors: "))
+    resistors = [float(input(f"Enter R{i+1} (ohms): ")) for i in range(n)]
+    V = float(input("Enter applied voltage (V): "))
+
+    R_total = 1 / sum(1/r for r in resistors)
+    I_total = V / R_total
+    currents = [V / r for r in resistors]
+
+    print(f"\nEquivalent Resistance = {R_total:.2f} Ω")
+    print(f"Total Current = {I_total:.2f} A")
+
+    # Graph: Current through each resistor
+    plt.bar([f"R{i+1}" for i in range(n)], currents, color='purple')
+    plt.title("Current Division in Parallel Circuit")
+    plt.xlabel("Resistor")
+    plt.ylabel("Current (A)")
+    plt.grid(True, axis='y')
+    plt.show()
+
+def kvl():
+    print("\nExperiment: Kirchhoff’s Voltage Law (KVL)")
+    print("Theory: KVL states that the algebraic sum of voltages around any closed loop in a circuit is zero. It demonstrates conservation of energy in electrical circuits.")
+    
+    E = float(input("Enter supply voltage (V): "))
+    R1 = float(input("Enter resistance R1 (Ω): "))
+    R2 = float(input("Enter resistance R2 (Ω): "))
+
+    I = E / (R1 + R2)
+    V1 = I * R1
+    V2 = I * R2
+    check = E - (V1 + V2)
+
+    print(f"\nCurrent = {I:.3f} A, V1 = {V1:.3f} V, V2 = {V2:.3f} V")
+    print(f"Loop sum (should be ≈ 0): {check:.4f}")
+    print("✅ KVL Verified.")
+
+# ---------- AC EXPERIMENTS ----------
+def ac_experiments():
+    print("\n--- AC Experiments ---")
+    print("1. RL Circuit Response")
+    print("2. RC Circuit Response")
+    print("3. RLC Resonance Curve")
+    print("4. Back to Main Menu")
+
+    ch = int(input("Enter your choice: "))
+    if ch == 1:
+        rl_circuit()
+    elif ch == 2:
+        rc_circuit()
+    elif ch == 3:
+        rlc_resonance()
+
+def rl_circuit():
+    print("\nExperiment: RL Circuit Response")
+    print("Theory: In an RL circuit, the current lags the voltage due to inductive reactance. The impedance increases with frequency because inductors oppose rapid changes in current.")
+    
+    R = float(input("Enter resistance (Ω): "))
+    L = float(input("Enter inductance (H): "))
+    f_max = float(input("Enter maximum frequency (Hz): "))
+
+    f = np.linspace(10, f_max, 200)
+    X_L = 2 * math.pi * f * L
+    Z = np.sqrt(R**2 + X_L**2)
+
+    plt.plot(f, Z, 'b-', label='Frequency vs Impedance')
+    plt.title("RL Circuit Response")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Impedance (Ω)")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+def rc_circuit():
+    print("\nExperiment: RC Circuit Response")
+    print("Theory: In an RC circuit, the voltage lags current because capacitors store and release energy. The impedance decreases with frequency since capacitive reactance reduces.")
+    
+    R = float(input("Enter resistance (Ω): "))
+    C = float(input("Enter capacitance (F): "))
+    f_max = float(input("Enter maximum frequency (Hz): "))
+
+    f = np.linspace(10, f_max, 200)
+    X_C = 1 / (2 * math.pi * f * C)
+    Z = np.sqrt(R**2 + X_C**2)
+
+    plt.plot(f, Z, 'g-', label='Frequency vs Impedance')
+    plt.title("RC Circuit Response")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Impedance (Ω)")
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+def rlc_resonance():
+    print("\nExperiment: Series RLC Resonance")
+    print("Theory: At resonance, the inductive and capacitive reactances cancel each other, making impedance minimum and current maximum. The resonant frequency depends on L and C values.")
+    
+    R = float(input("Enter resistance (Ω): "))
+    L = float(input("Enter inductance (H): "))
+    C = float(input("Enter capacitance (F): "))
+    f_max = float(input("Enter maximum frequency (Hz): "))
+
+    f = np.linspace(10, f_max, 300)
+    X_L = 2 * math.pi * f * L
+    X_C = 1 / (2 * math.pi * f * C)
+    Z = np.sqrt(R**2 + (X_L - X_C)**2)
+    f_r = 1 / (2 * math.pi * math.sqrt(L * C))
+
+    plt.plot(f, Z, 'm-', label='Frequency vs Impedance')
+    plt.axvline(x=f_r, color='r', linestyle='--', label=f'Resonance = {f_r:.1f} Hz')
+    plt.title("Series RLC Resonance Curve")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Impedance (Ω)")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+# ---------- DIGITAL EXPERIMENTS ----------
+def digital_experiments():
+    print("\n--- Digital Experiments ---")
+    print("1. AND Gate")
+    print("2. OR Gate")
+    print("3. NOT Gate")
+    print("4. NAND Gate")
+    print("5. NOR Gate")
+    print("6. Back to Main Menu")
+
+    ch = int(input("Enter your choice: "))
+    if ch == 1:
+        and_gate()
+    elif ch == 2:
+        or_gate()
+    elif ch == 3:
+        not_gate()
+    elif ch == 4:
+        nand_gate()
+    elif ch == 5:
+        nor_gate()
+
+def and_gate():
+    print("\nExperiment: AND Gate")
+    print("Theory: The AND gate produces a HIGH output only when all inputs are HIGH. It represents logical multiplication.")
+    A = int(input("Enter A (0/1): "))
+    B = int(input("Enter B (0/1): "))
+    print(f"Output Y = {A and B}")
+
+def or_gate():
+    print("\nExperiment: OR Gate")
+    print("Theory: The OR gate gives a HIGH output when any input is HIGH. It represents logical addition.")
+    A = int(input("Enter A (0/1): "))
+    B = int(input("Enter B (0/1): "))
+    print(f"Output Y = {A or B}")
+
+def not_gate():
+    print("\nExperiment: NOT Gate")
+    print("Theory: The NOT gate inverts the input signal, giving HIGH output for LOW input and vice versa.")
+    A = int(input("Enter A (0/1): "))
+    print(f"Output Y = {int(not A)}")
+
+def nand_gate():
+    print("\nExperiment: NAND Gate")
+    print("Theory: NAND gate is the complement of AND operation. It gives LOW output only when all inputs are HIGH.")
+    A = int(input("Enter A (0/1): "))
+    B = int(input("Enter B (0/1): "))
+    print(f"Output Y = {int(not (A and B))}")
+
+def nor_gate():
+    print("\nExperiment: NOR Gate")
+    print("Theory: NOR gate is the complement of OR operation. It gives HIGH output only when all inputs are LOW.")
+    A = int(input("Enter A (0/1): "))
+    B = int(input("Enter B (0/1): "))
+    print(f"Output Y = {int(not (A or B))}")
+
+# ---------- MAIN PROGRAM ----------
+while True:
+    intro()
+    choice = int(input("Enter your choice: "))
+    if choice == 1:
+        dc_experiments()
+    elif choice == 2:
+        ac_experiments()
+    elif choice == 3:
+        digital_experiments()
+    else:
+        print("\nExiting Virtual BEE Lab... Goodbye! ⚡")
+        break
